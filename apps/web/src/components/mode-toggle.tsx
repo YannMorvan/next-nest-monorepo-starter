@@ -5,15 +5,17 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
+const emptySubscribe = () => () => {};
+
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const isMounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  if (!isMounted) {
     return (
       <Button variant="outline" size="icon" className="size-9" disabled>
         <span className="sr-only">Toggle theme</span>
