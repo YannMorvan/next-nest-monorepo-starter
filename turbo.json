@@ -14,7 +14,7 @@
       "dependsOn": ["^build"]
     },
     "test": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^db:generate", "^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "**/*.spec.ts",
