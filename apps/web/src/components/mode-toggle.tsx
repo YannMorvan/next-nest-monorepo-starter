@@ -31,7 +31,7 @@ export function ModeToggle() {
       size="icon"
       className="size-9 cursor-pointer"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label="Basculer le thème"
+      aria-label="Toggle theme"
     >
       {isDark ? (
         <Sun className="size-4 text-amber-400 transition-all" />
