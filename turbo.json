@@ -26,13 +26,24 @@
     "db:generate": {
       "cache": false
     },
+    "db:push": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:up": {
+      "cache": false,
+      "persistent": true
+    },
     "dev": {
       "dependsOn": ["^build", "^db:generate"],
       "cache": false,
       "persistent": true
-    },
-    "clean": {
-      "cache": false
     }
   }
 }
