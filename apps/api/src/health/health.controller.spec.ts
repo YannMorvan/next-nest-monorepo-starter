@@ -4,6 +4,11 @@ import { HealthController } from './health.controller.js';
 import { HealthService } from './health.service.js';
 import type { HealthStatus } from '@repo/contracts';
 
+vi.mock('@repo/database', () => ({
+  PrismaClient: class PrismaClient {},
+  prisma: {},
+}));
+
 describe('HealthController', () => {
   let controller: HealthController;
   let mockHealthService: { check: ReturnType<typeof vi.fn> };

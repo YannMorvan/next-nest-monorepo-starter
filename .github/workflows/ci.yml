@@ -45,5 +45,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
+      - name: Generate Prisma Client
+        run: pnpm run db:generate
+
       - name: Run CI Validation
         run: pnpm run check-all
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test_db"
+          PORT: 4000
+          NODE_ENV: test
