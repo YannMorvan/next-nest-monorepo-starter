@@ -107,7 +107,7 @@ export default async function HomePage() {
         <div className="flex justify-center gap-4">
           <Button variant="default">
             <a
-              href="http://localhost:4000/health"
+              href="http://localhost:4000/api/health"
               target="_blank"
               rel="noreferrer"
             >
