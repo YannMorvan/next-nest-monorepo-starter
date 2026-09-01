@@ -1,11 +1,9 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "target": "ES2022",
-    "types": ["node"],
-    "skipLibCheck": true
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true
   },
-  "include": ["src/**/*", "prisma.config.ts"]
+  "include": ["src/**/*"]
 }

@@ -1,12 +1,122 @@
 import { getHealthStatus } from "@/api";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+async function fetchHealth() {
+  try {
+    return await getHealthStatus();
+  } catch {
+    return { status: "error", db: "disconnected" } as const;
+  }
+}
 
 export default async function HomePage() {
-  const health = await getHealthStatus();
+  const health = await fetchHealth();
+  const isApiOk = health.status === "ok";
+  const isDbOk = health.db === "connected";
 
   return (
-    <div>
-      <p>Status : {health.status}</p>
-      <p>Uptime : {health.uptime.toFixed(2)}s</p>
-    </div>
+    <main className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center p-6 text-neutral-900">
+      <div className="max-w-2xl w-full space-y-8">
+        {/* Header */}
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            Next.js + NestJS + Prisma
+          </h1>
+          <p className="text-neutral-600 text-sm sm:text-base">
+            Monorepo starter template with Next.js App Router, NestJS REST API,
+            and Prisma ORM.
+          </p>
+        </div>
+
+        {/* Services Status Card */}
+        <Card className="shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg">Services Status</CardTitle>
+            <CardDescription>
+              Check the health of the frontend, backend, and database services.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium">Frontend (Web)</p>
+                <p className="text-xs text-neutral-500">Next.js App Router</p>
+              </div>
+              <Badge className="bg-emerald-600 hover:bg-emerald-600 text-white">
+                Operational
+              </Badge>
+            </div>
+
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium">API (Backend)</p>
+                <p className="text-xs text-neutral-500">NestJS REST</p>
+              </div>
+              <Badge
+                variant={isApiOk ? "default" : "destructive"}
+                className={
+                  isApiOk
+                    ? "bg-emerald-600 hover:bg-emerald-600 text-white"
+                    : ""
+                }
+              >
+                {isApiOk ? "Connected" : "Offline"}
+              </Badge>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium">Database</p>
+                <p className="text-xs text-neutral-500">PostgreSQL (Prisma)</p>
+              </div>
+              <Badge
+                variant={isDbOk ? "default" : "destructive"}
+                className={
+                  isDbOk ? "bg-emerald-600 hover:bg-emerald-600 text-white" : ""
+                }
+              >
+                {isDbOk ? "Connected" : "Disconnected"}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <div className="flex justify-center gap-4">
+          <Button
+            variant="default"
+            className="bg-emerald-600 hover:bg-emerald-600 text-white"
+          >
+            <a
+              href="http://localhost:4000/api/health"
+              target="_blank"
+              rel="noreferrer"
+            >
+              API Healthcheck
+            </a>
+          </Button>
+          <Button
+            variant="default"
+            className="bg-emerald-600 hover:bg-emerald-600 text-white"
+          >
+            <a
+              href="https://turbo.build/repo/docs"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Turbo Docs
+            </a>
+          </Button>
+        </div>
+      </div>
+    </main>
   );
 }
