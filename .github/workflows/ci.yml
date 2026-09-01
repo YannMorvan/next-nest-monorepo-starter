@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Lint, Test & Build
+    name: Lint, Typecheck, Test & Build
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 2
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: 11
           run_install: false
@@ -39,16 +39,12 @@ jobs:
       - name: Cache Turborepo
         uses: actions/cache@v4
         with:
-          path: .turbo
+          path: |
+            .turbo
+            node_modules/.cache/turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Run Linters
-        run: pnpm run lint
-
-      - name: Run Tests
-        run: pnpm run test
-
-      - name: Run Build
-        run: pnpm run build
+      - name: Run CI Validation
+        run: pnpm run check-all

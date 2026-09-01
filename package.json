@@ -8,7 +8,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
+    "type-check": "turbo run type-check",
+    "check-all": "turbo run lint type-check test build",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {

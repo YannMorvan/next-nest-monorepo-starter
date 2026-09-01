@@ -4,24 +4,15 @@ import swc from 'unplugin-swc';
 export default defineConfig({
   test: {
     globals: true,
-    root: './',
     environment: 'node',
+    pool: 'forks',
+    setupFiles: ['./test/setup.ts'],
+    hookTimeout: 30000,
+    testTimeout: 30000,
   },
   plugins: [
     swc.vite({
       module: { type: 'es6' },
-      jsc: {
-        target: 'es2022',
-        parser: {
-          syntax: 'typescript',
-          decorators: true,
-          dynamicImport: true,
-        },
-        transform: {
-          legacyDecorator: true,
-          decoratorMetadata: true,
-        },
-      },
     }),
   ],
 });
