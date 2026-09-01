@@ -1,4 +1,13 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
+function getBaseUrl(): string {
+  if (typeof window === "undefined") {
+    return (
+      process.env.API_INTERNAL_URL ??
+      process.env.NEXT_PUBLIC_API_URL ??
+      "http://localhost:4000/api"
+    );
+  }
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
+}
 
 export class ApiError extends Error {
   constructor(
@@ -15,11 +24,12 @@ export async function apiClient<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
+  const baseUrl = getBaseUrl().replace(/\/$/, "");
   const normalizedEndpoint = endpoint.startsWith("/")
     ? endpoint
     : `/${endpoint}`;
 
-  const response = await fetch(`${API_URL}${normalizedEndpoint}`, {
+  const response = await fetch(`${baseUrl}${normalizedEndpoint}`, {
     ...options,
     credentials: "include",
     headers: {

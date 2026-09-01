@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: monorepo_postgres_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-monorepo_db}
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    networks:
+      - monorepo-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-monorepo_db}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Backend NestJS
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: monorepo_api_prod
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-monorepo_db}?schema=public
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - monorepo-network
+
+  # Frontend Next.js
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: monorepo_web_prod
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_INTERNAL_URL: http://api:4000/api
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - monorepo-network
+
+networks:
+  monorepo-network:
+    driver: bridge
+
+volumes:
+  pgdata_prod:
+    driver: local

@@ -18,7 +18,10 @@
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate",
     "db:push": "turbo run db:push",
-    "db:studio": "turbo run db:studio"
+    "db:studio": "turbo run db:studio",
+    "prod:up": "docker compose -f docker-compose.prod.yml up -d --build",
+    "prod:down": "docker compose -f docker-compose.prod.yml down",
+    "prod:logs": "docker compose -f docker-compose.prod.yml logs -f"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
