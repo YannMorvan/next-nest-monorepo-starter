@@ -10,7 +10,15 @@
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "check-all": "turbo run lint type-check test build",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down && docker compose up -d",
+    "db:logs": "docker compose logs -f",
+    "db:generate": "turbo run db:generate",
+    "db:migrate": "turbo run db:migrate",
+    "db:push": "turbo run db:push",
+    "db:studio": "turbo run db:studio"
   },
   "devDependencies": {
     "turbo": "^2.0.0",
